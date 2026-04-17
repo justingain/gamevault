@@ -14,6 +14,6 @@ A Flask-based web application for tracking video game collections
 - HTML (Jinja Templates)
 
 ## How to Run
-''' bash
+``` bash
 pip install -r requirements.txt
 python app.py
