@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit Game</h2>
+
+{% if error %}
+    <p style = "color:red;"><strong>{{ error }}</strong></p>
+{% endif %}
+
+<form method="POST">
+    <div>
+        <label>Title:</label><br>
+        <input type="text" name="title" value="{{ game.title }}" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Platform:</label><br>
+        <input type="text" name="platform" value="{{ game.platform }}" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Status:</label><br>
+        <select name="status">
+            <option value="Backlog" {% if game.status == "Backlog" %}selected{% endif %}>Backlog</option>
+            <option value="Playing" {% if game.status == "Playing" %}selected{% endif %}>Playing</option>
+            <option value="Completed" {% if game.status == "Completed" %}selected{% endif %}>Completed</option>
+        </select>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Rating:</label><br>
+        <input type="number" name="rating" min="1" max="10" value="{{ game.rating or '' }}">
+    </div>
+
+    <br>
+
+    <button type="submit">Update Game</button>
+</form>
+{% endblock %}

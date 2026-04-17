@@ -1,0 +1,22 @@
+from flask import Flask, render_template
+from models import db, Game
+
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///gamevault.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db.init_app(app)
+
+@app.route("/")
+def home():
+    return "<h1>GameVault is running</h1><p>Go to <a href='/games'>/games</a></p>"
+
+@app.route("/games")
+def games():
+    all_games = Game.query.all()
+    return render_template("games.html", games=all_games)
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run(host="127.0.0.1", port=5000)

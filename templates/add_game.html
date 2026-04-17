@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add Game</h2>
+
+{% if error %}
+    <p style="color: red;"><strong>{{ error }}</strong></p>
+{% endif %}
+
+<form method="POST" action="/games/add">
+    <div>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="platform">Platform:</label><br>
+        <input type="text" id="platform" name="platform" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="status">Status:</label><br>
+        <select id="status" name="status">
+            <option value="Backlog">Backlog</option>
+            <option value="Playing">Playing</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="rating">Rating (1-10):</label><br>
+        <input type="number" id="rating" min="1" max="10">
+    </div>
+
+    <br>
+
+    <button type="submit">Save Game</button>
+</form>
+{% endblock %}
