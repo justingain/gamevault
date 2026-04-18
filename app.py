@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from sqlalchemy import func
 from models import db, Game, PlaySession
 
 app = Flask(__name__)
@@ -168,6 +169,30 @@ def delete_play_session(session_id):
     db.session.commit()
 
     return redirect(url_for("game_detail", game_id=game_id))
+
+@app.route("/dashboard")
+def dashboard():
+    total_games = Game.query.count()
+    backlog_count = Game.query.filter_by(status="Backlog").count()
+    completed_count = Game.query.filter_by(status="Completed").count()
+
+    total_playtime = db.session.query(
+        func.coalesce(func.sum(PlaySession.duration_minutes), 0)
+    ).scalar()
+
+    most_played = db.session.query(
+        Game.title,
+        func.coalesce(func.sum(PlaySession.duration_minutes), 0).label("total_minutes")
+    ).join(PlaySession).group_by(Game.id).order_by(func.sum(PlaySession.duration_minutes).desc()).first()
+
+    return render_template(
+        "dashboard.html",
+        total_games=total_games,
+        backlog_count=backlog_count,
+        completed_count=completed_count,
+        total_playtime=total_playtime,
+        most_played=most_played
+    )
 
 if __name__ == "__main__":
     with app.app_context():

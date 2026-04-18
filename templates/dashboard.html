@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Dashboard</h2>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+
+    <div style="border:1px solid #ccc; padding:15px; width:200px;">
+        <h3>Total Games</h3>
+        <p>{{ total_games }}</p>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:15px; width:200px;">
+        <h3>Backlog</h3>
+        <p>{{ backlog_count }}</p>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:15px; width:200px;">
+        <h3>Completed</h3>
+        <p>{{ completed_count }}</p>
+    </div>
+
+    <div style="border:1px solid #ccc; padding:15px; width:200px;">
+        <h3>Total Playtime</h3>
+        <p>{{ total_playtime }} min</p>
+    </div>
+
+</div>
+
+<br>
+
+<h3>Most Played Game</h3>
+
+{% if most_played %}
+    <p>
+        <strong>{{ most_played[0] }}</strong><br>
+        {{ most_played[1] }} minutes played
+    </p>
+{% else %}
+    <p>No play sessions yet..</p>
+{% endif %}
+
+{% endblock %}
