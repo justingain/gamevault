@@ -185,16 +185,24 @@ def dashboard():
         func.coalesce(func.sum(PlaySession.duration_minutes), 0).label("total_minutes")
     ).join(PlaySession).group_by(Game.id).order_by(func.sum(PlaySession.duration_minutes).desc()).first()
 
+    monthly_playtime = db.session.query(
+        func.substr(PlaySession.session_date, 1, 7).label("month"),
+        func.sum(PlaySession.duration_minutes).label("total_minutes")
+    ).group_by("month").order_by("month").all()
+
     return render_template(
         "dashboard.html",
         total_games=total_games,
         backlog_count=backlog_count,
         completed_count=completed_count,
         total_playtime=total_playtime,
-        most_played=most_played
+        most_played=most_played,
+        monthly_playtime=monthly_playtime
     )
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(host="::", port=5001, debug=True, use_reloader=False)
+
+    

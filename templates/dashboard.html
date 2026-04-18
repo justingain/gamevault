@@ -54,4 +54,25 @@
         {% endif %}
     </div>
 </div>
+
+<div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+        <div class="card-body">
+            <h4 class="card-title">Monthly Playtime</h4>
+
+            {% if monthly_playtime %}
+                <ul class="list-group list-group-flush">
+                    {% for month in monthly_playtime %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{{ month[0] }}</span>
+                            <span class="badge bg-primary rounded-pill">{{ month[1] }} min</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="mb-0 text-muted">No monthly playtime data yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
