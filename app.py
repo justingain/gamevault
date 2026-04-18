@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from models import db, Game
+from models import db, Game, PlaySession
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///gamevault.db"
@@ -57,6 +57,7 @@ def add_game():
     
     return render_template("add_game.html", error=None)
 
+
 # Delete game logic
 @app.route("/games/delete/<int:game_id>", methods=["POST"])
 def delete_game(game_id):
@@ -79,6 +80,13 @@ def edit_game(game_id):
 
         rating_raw = request.form.get("rating", "").strip()
 
+        if not game.title or not game.platform:
+            return render_template(
+                "edit_game.html",
+                game=game,
+                error="Title and Platform are required."
+            )
+
         if rating_raw:
             try:
                 rating = int(rating_raw)
@@ -95,6 +103,71 @@ def edit_game(game_id):
         return redirect(url_for("games"))
     
     return render_template("edit_game.html", game=game, error=None)
+
+@app.route("/games/<int:game_id>")
+def game_detail(game_id):
+    game = Game.query.get_or_404(game_id)
+    sessions = PlaySession.query.filter_by(game_id=game.id).order_by(PlaySession.id.desc()).all()
+
+    total_minutes = sum(session.duration_minutes for session in sessions)
+
+    return render_template(
+        "game_detail.html",
+        game=game,
+        sessions=sessions,
+        total_minutes=total_minutes
+    )
+
+@app.route("/games/<int:game_id>/sessions/add", methods=["GET", "POST"])
+def add_play_session(game_id):
+    game = Game.query.get_or_404(game_id)
+
+    if request.method == "POST":
+        session_date = request.form.get("session_date", "").strip()
+        duration_raw = request.form.get("duration_minutes", "").strip()
+        notes = request.form.get("notes", "").strip()
+
+        if not session_date or not duration_raw:
+            return render_template(
+                "add_play_session.html",
+                game=game,
+                error="Date and duration are required."
+            )
+        
+        try:
+            duration_minutes = int(duration_raw)
+            if duration_minutes <= 0:
+                raise ValueError
+        except ValueError:
+            return render_template(
+                "add_play_session.html",
+                game=game,
+                error="Duration must be a positve whole number"
+            )
+        
+        new_session = PlaySession(
+            session_date=session_date,
+            duration_minutes=duration_minutes,
+            notes=notes if notes else None,
+            game_id=game.id
+        )
+
+        db.session.add(new_session)
+        db.session.commit()
+
+        return redirect(url_for("game_detail", game_id=game.id))
+    
+    return render_template("add_play_session.html", game=game, error=None)
+
+@app.route("/sessions/delete/<int:session_id>", methods=["POST"])
+def delete_play_session(session_id):
+    session = PlaySession.query.get_or_404(session_id)
+    game_id = session.game_id
+
+    db.session.delete(session)
+    db.session.commit()
+
+    return redirect(url_for("game_detail", game_id=game_id))
 
 if __name__ == "__main__":
     with app.app_context():

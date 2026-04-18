@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ game.title }}</h2>
+
+<p><strong>Platform:</strong> {{ game.platform }}</p>
+<p><strong>Status:</strong> {{ game.status }}</p>
+<p><strong>Rating:</strong> {{ game.rating if game.rating else "Not rated.." }}</p>
+
+<hr>
+
+<h3>Play Sessions</h3>
+
+<p>
+    <a href="/games/{{ game.id }}/sessions/add">Add Play Session</a>
+</p>
+
+<p><strong>Total Play Time:</strong> {{ total_minutes }} minutes</p>
+
+{% if sessions %}
+    <ul>
+        {% for session in sessions %}
+        <li>
+            <strong>{{ session.session_date }}</strong>
+            - {{ session.duration_minutes }} minutes
+            {% if session.notes %}
+                - {{ session.notes }}
+            {% endif %}
+
+            <form method="POST" action="/sessions/delete/{{ session.id }}" style="display:inline;">
+                <button type="submit" onclick="return confirm('Delete this play session?');">Delete Session</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No play sessions added yet.</p>
+{% endif %}
+
+<p><a href="/games">Back to Games</a></p>
+{% endblock %}

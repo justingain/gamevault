@@ -9,7 +9,7 @@
     <ul>
         {% for game in games %}
             <li>
-                <strong>{{ game.title }}</strong> 
+                <strong><a href="/games/{{ game.id }}">{{ game.title }}</a></strong> 
                 - {{ game.platform }} 
                 - {{ game.status }}
                 {% if game.rating %}

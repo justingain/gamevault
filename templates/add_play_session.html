@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add Play Session for {{ game.title }}</h2>
+
+{% if error %}
+    <p style="color:red;"><strong>{{ error }}</strong></p>
+{% endif %}
+
+<form method="POST">
+    <div>
+        <label for="session_date">Date:</label><br>
+        <input type="date" id="session_date" name="session_date" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="duration_minutes">Duration (minutes):</label><br>
+        <input type="number" id="duration_minutes" name="duration_minutes" min="1" required>
+    </div>
+
+    <br>
+    
+    <div>
+        <label for="notes">Notes:</label><br>
+        <textarea id="notes" name="notes" rows="4" cols="40"></textarea>
+    </div>
+
+    <br>
+
+    <button type="submit">Save Play Session</button>
+</form>
+
+<p><a href="/games/{{ game.id }}">Back to Game Details</a></p>
+{% endblock %}

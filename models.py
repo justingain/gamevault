@@ -11,3 +11,14 @@ class Game(db.Model):
 
     def __repr__(self):
         return f"<Game {self.title}>"
+        
+class PlaySession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    session_date = db.Column(db.String(50), nullable=False)
+    duration_minutes = db.Column(db.Integer, nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+
+    game_id = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=False)
+
+    def __repr__(self):
+        return f"<PlaySession {self.session_date} - {self.duration_minutes} min>"
