@@ -1,45 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Edit Game</h2>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Edit Game</h2>
 
-{% if error %}
-    <p style = "color:red;"><strong>{{ error }}</strong></p>
-{% endif %}
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
 
-<form method="POST">
-    <div>
-        <label>Title:</label><br>
-        <input type="text" name="title" value="{{ game.title }}" required>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" id="title" name="title" value="{{ game.title }}" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="platform" class="form-label">Platform</label>
+                        <input type="text" id="platform" name="platform" value="{{ game.platform }}" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select id="status" name="status" class="form-select">
+                            <option value="Backlog" {% if game.status == "Backlog" %}selected{% endif %}>Backlog</option>
+                            <option value="Playing" {% if game.status == "Playing" %}selected{% endif %}>Playing</option>
+                            <option value="Completed" {% if game.status == "Completed" %}selected{% endif %}>Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="number" id="rating" name="rating" min="1" max="10"
+                               value="{{ game.rating or '' }}" class="form-control">
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Update Game</button>
+                        <a href="/games" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <br>
-
-    <div>
-        <label>Platform:</label><br>
-        <input type="text" name="platform" value="{{ game.platform }}" required>
-    </div>
-
-    <br>
-
-    <div>
-        <label>Status:</label><br>
-        <select name="status">
-            <option value="Backlog" {% if game.status == "Backlog" %}selected{% endif %}>Backlog</option>
-            <option value="Playing" {% if game.status == "Playing" %}selected{% endif %}>Playing</option>
-            <option value="Completed" {% if game.status == "Completed" %}selected{% endif %}>Completed</option>
-        </select>
-    </div>
-
-    <br>
-
-    <div>
-        <label>Rating:</label><br>
-        <input type="number" name="rating" min="1" max="10" value="{{ game.rating or '' }}">
-    </div>
-
-    <br>
-
-    <button type="submit">Update Game</button>
-</form>
+</div>
 {% endblock %}

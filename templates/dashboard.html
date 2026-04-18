@@ -1,43 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Dashboard</h2>
+<h2 class="mb-4">Dashboard</h2>
 
-<div style="display: flex; gap: 20px; flex-wrap: wrap;">
-
-    <div style="border:1px solid #ccc; padding:15px; width:200px;">
-        <h3>Total Games</h3>
-        <p>{{ total_games }}</p>
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Games</h5>
+                <p class="display-6 mb-0">{{ total_games }}</p>
+            </div>
+        </div>
     </div>
 
-    <div style="border:1px solid #ccc; padding:15px; width:200px;">
-        <h3>Backlog</h3>
-        <p>{{ backlog_count }}</p>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Backlog</h5>
+                <p class="display-6 mb-0">{{ backlog_count }}</p>
+            </div>
+        </div>
     </div>
 
-    <div style="border:1px solid #ccc; padding:15px; width:200px;">
-        <h3>Completed</h3>
-        <p>{{ completed_count }}</p>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Completed</h5>
+                <p class="display-6 mb-0">{{ completed_count }}</p>
+            </div>
+        </div>
     </div>
 
-    <div style="border:1px solid #ccc; padding:15px; width:200px;">
-        <h3>Total Playtime</h3>
-        <p>{{ total_playtime }} min</p>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Total Playtime</h5>
+                <p class="display-6 mb-0">{{ total_playtime }}</p>
+                <small class="text-muted">minutes</small>
+            </div>
+        </div>
     </div>
-
 </div>
 
-<br>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title">Most Played Game</h4>
 
-<h3>Most Played Game</h3>
-
-{% if most_played %}
-    <p>
-        <strong>{{ most_played[0] }}</strong><br>
-        {{ most_played[1] }} minutes played
-    </p>
-{% else %}
-    <p>No play sessions yet..</p>
-{% endif %}
-
+        {% if most_played %}
+            <p class="mb-1"><strong>{{ most_played[0] }}</strong></p>
+            <p class="text-muted mb-0">{{ most_played[1] }} minutes played</p>
+        {% else %}
+            <p class="mb-0 text-muted">No play sessions yet.</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
